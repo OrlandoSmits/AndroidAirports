@@ -5,4 +5,12 @@ package nl.orlandosmits.airports;
  */
 
 public class Airport {
+    public String icao;
+    public String name;
+    public Double longitude;
+    public Double latitude;
+    public Double elevation;
+    public String iso_country;
+    public String municipality;
+
 }

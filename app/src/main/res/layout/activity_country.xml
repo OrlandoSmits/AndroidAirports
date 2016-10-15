@@ -7,10 +7,9 @@
     <ListView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:id="@+id/airportList"
+        android:id="@+id/countrylist"
         android:layout_gravity="center_horizontal"
         android:background="@android:color/background_dark"
         android:layout_weight="9"
         />
 </LinearLayout>
-
