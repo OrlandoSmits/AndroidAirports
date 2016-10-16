@@ -13,7 +13,8 @@ import android.widget.ListView;
 import java.util.ArrayList;
 
 public class countryActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
-    private ListView countryList;
+    ListView countryList;
+    AirportCountryAdapter countryAdapter;
     ArrayList list = new ArrayList();
 
     @Override
@@ -21,7 +22,6 @@ public class countryActivity extends AppCompatActivity implements AdapterView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_country);
 
-/*
 
         countryList = (ListView) findViewById(R.id.countrylist);
 
@@ -30,25 +30,18 @@ public class countryActivity extends AppCompatActivity implements AdapterView.On
 
         cursor.moveToFirst();
         while (cursor.moveToNext()) {
-            String country = cursor.getString(cursor.getColumnIndex("iso_country"));
             Airport airport = new Airport();
-            airport.iso_country = country;
-            list.add(country);
+            airport.iso_country = cursor.getString(cursor.getColumnIndex("iso_country"));
+            list.add(airport);
         }
 
-        ArrayAdapter adapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1, list);
-        countryList.setAdapter(adapter);
+        countryAdapter = new AirportCountryAdapter(this, getLayoutInflater(), list);
+        countryList.setAdapter(countryAdapter);
 
-        adapter.notifyDataSetChanged();
+        countryAdapter.notifyDataSetChanged();
 
-        countryList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent i = new Intent(getApplicationContext(), MainActivity.class);
-                Airport airport = list.get(position);
+        countryList.setOnItemClickListener(this);
 
-            }
-        });
     }
 
     @Override
@@ -56,14 +49,10 @@ public class countryActivity extends AppCompatActivity implements AdapterView.On
         Log.d("SelectedItem: ", position + "");
 
         Intent i = new Intent(getApplicationContext(), MainActivity.class);
-        this.countryList.get(position);
-    }
-}
-*/
+        Airport airport = (Airport) this.list.get(position);
+        i.putExtra("AirportCountry", airport.iso_country);
+
+        startActivity(i);
     }
 
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-    }
 }

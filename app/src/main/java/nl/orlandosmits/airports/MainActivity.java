@@ -31,8 +31,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
         DatabaseHandler db = new DatabaseHandler(this);
 
-
-        Cursor cursor = db.getAirports();
+        Bundle extras = getIntent().getExtras();
+        String country = extras.getString("AirportCountry");
+        Cursor cursor = db.getAirports(country);
 
         cursor.moveToFirst();
         while (cursor.moveToNext()) {

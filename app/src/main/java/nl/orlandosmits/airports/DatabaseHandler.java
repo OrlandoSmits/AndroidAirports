@@ -20,10 +20,10 @@ public class DatabaseHandler extends SQLiteAssetHelper {
         super(context, DB_NAME, null, DB_VERSION);
     }
 
-    public Cursor getAirports() {
+    public Cursor getAirports(String Country) {
         SQLiteDatabase db = getReadableDatabase();
 
-        String query = "SELECT icao, name FROM airports WHERE iso_country = \"NL\" ORDER BY name;";
+        String query = "SELECT icao, name FROM airports WHERE iso_country ='"+Country+"' ORDER BY name;";
         Cursor c = db.rawQuery(query, null);
         c.moveToFirst();
         db.close();
