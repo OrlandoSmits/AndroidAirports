@@ -1,28 +1,31 @@
 package nl.orlandosmits.airports;
 
+import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
 
-    private ListView airportList;
-    ArrayList list;
+    ListView airportList;
+    AirportAdapter airportAdapter;
+    ArrayList list = new ArrayList();
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        list = new ArrayList<String>();
 
        airportList = (ListView) findViewById(R.id.airportList);
 
@@ -33,13 +36,32 @@ public class MainActivity extends AppCompatActivity {
 
         cursor.moveToFirst();
         while (cursor.moveToNext()) {
-            String name = cursor.getString(cursor.getColumnIndex("name"));
-            list.add(name);
+            Airport airport = new Airport();
+            airport.name = cursor.getString(cursor.getColumnIndex("name"));
+            airport.icao = cursor.getString(cursor.getColumnIndex("icao"));
+            list.add(airport);
         }
 
-        ArrayAdapter adapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1, list);
-        airportList.setAdapter(adapter);
+        airportAdapter = new AirportAdapter(this, getLayoutInflater(), list);
+        Log.i("log", list.toString());
+        airportList.setAdapter(airportAdapter);
 
-        adapter.notifyDataSetChanged();
+        airportAdapter.notifyDataSetChanged();
+
+        airportList.setOnItemClickListener(this);
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        Log.d("SelectedItem: ", position + "");
+
+        Intent i = new Intent(getApplicationContext(), DetailActivity.class);
+        Airport airport = (Airport) this.list.get(position);
+        Bundle extras = new Bundle();
+        i.putExtra("AirportName",  airport.name);
+        i.putExtra("AirportIcao", airport.icao);
+
+        startActivity(i);
+
     }
 }

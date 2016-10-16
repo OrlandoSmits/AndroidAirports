@@ -12,7 +12,7 @@ import android.widget.ListView;
 
 import java.util.ArrayList;
 
-public class countryActivity extends AppCompatActivity {
+public class countryActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
     private ListView countryList;
     ArrayList list = new ArrayList();
 
@@ -21,6 +21,7 @@ public class countryActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_country);
 
+/*
 
         countryList = (ListView) findViewById(R.id.countrylist);
 
@@ -56,5 +57,13 @@ public class countryActivity extends AppCompatActivity {
 
         Intent i = new Intent(getApplicationContext(), MainActivity.class);
         this.countryList.get(position);
+    }
+}
+*/
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
     }
 }

@@ -1,10 +1,12 @@
 package nl.orlandosmits.airports;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -27,21 +29,48 @@ public class AirportAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return 0;
+        int size = mAirportList.size();
+        Log.i("getCount()", "=" + size);
+        return size;
     }
 
     @Override
     public Object getItem(int position) {
-        return null;
+        Log.i("getItem()", "");
+        return mAirportList.get(position);
     }
 
     @Override
     public long getItemId(int position) {
-        return 0;
+        return position;
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        return null;
+
+        ViewHolder viewHolder;
+        if (convertView == null) {
+            convertView = mInflator.inflate(R.layout.airport_row, null);
+
+            viewHolder = new ViewHolder();
+            viewHolder.name = (TextView) convertView.findViewById(R.id.name);
+            viewHolder.icao = (TextView) convertView.findViewById(R.id.icao);
+
+            convertView.setTag(viewHolder);
+        } else {
+            viewHolder = (ViewHolder) convertView.getTag();
+        }
+
+        Airport airport = (Airport) mAirportList.get(position);
+
+        viewHolder.name.setText(airport.name);
+        viewHolder.icao.setText(airport.icao);
+
+        return convertView;
+    }
+
+    private static class ViewHolder {
+        public TextView name;
+        public TextView icao;
     }
 }
