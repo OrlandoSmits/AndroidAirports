@@ -40,6 +40,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             Airport airport = new Airport();
             airport.name = cursor.getString(cursor.getColumnIndex("name"));
             airport.icao = cursor.getString(cursor.getColumnIndex("icao"));
+            airport.iso_country = cursor.getString(cursor.getColumnIndex("iso_country"));
+            airport.latitude = cursor.getDouble(cursor.getColumnIndex("latitude"));
+            airport.longitude = cursor.getDouble(cursor.getColumnIndex("longitude"));
             list.add(airport);
         }
 
@@ -58,9 +61,10 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
         Intent i = new Intent(getApplicationContext(), DetailActivity.class);
         Airport airport = (Airport) this.list.get(position);
-        Bundle extras = new Bundle();
         i.putExtra("AirportName",  airport.name);
         i.putExtra("AirportIcao", airport.icao);
+        i.putExtra("Lat", airport.latitude);
+        i.putExtra("Lon", airport.longitude);
 
         startActivity(i);
 
