@@ -4,6 +4,11 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <SearchView
+        android:layout_width="match_parent"
+        android:layout_height="34dp"
+        android:id="@+id/countrySearch"/>
+
     <ListView
         android:layout_width="match_parent"
         android:layout_height="0dp"

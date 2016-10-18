@@ -1,5 +1,7 @@
 package nl.orlandosmits.airports;
 
+import android.graphics.Color;
+import android.location.Location;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.TextView;
@@ -11,9 +13,12 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolygonOptions;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
 
 public class DetailActivity extends AppCompatActivity implements OnMapReadyCallback {
 
@@ -45,7 +50,7 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
 
     }
 
-    static final LatLng AVANS = new LatLng(51.5719, 4.7683);
+    static final LatLng Schiphol = new LatLng(52.3094593, 4.7600949);
     @Override
     public void onMapReady(GoogleMap googleMap) {
         this.googleMap = googleMap;
@@ -60,22 +65,43 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
         LatLng airportLocation = new LatLng(lat, lon);
         String airportIcao = extras.getString("AirportIcao");
 
-        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(airportLocation, 13);
-        this.googleMap.animateCamera(cameraUpdate);
+        Double avgLat = (lat + Schiphol.latitude)/ 2;
+        Double avgLon = (lon + Schiphol.longitude) /2;
+        LatLng avgCoordinates = new LatLng(avgLat, avgLon);
 
-        Marker marker = this.googleMap.addMarker(new MarkerOptions()
+        Location schiphol = new Location("");
+        schiphol.setLatitude(Schiphol.latitude);
+        schiphol.setLongitude(Schiphol.longitude);
+
+        Location current = new Location("");
+        current.setLatitude(lat);
+        current.setLongitude(lon);
+
+        float distanceInMeters = schiphol.distanceTo(current);
+
+        LatLngBounds.Builder builder = new LatLngBounds.Builder();
+        builder.include(Schiphol);
+        builder.include(airportLocation);
+        LatLngBounds bounds = builder.build();
+        googleMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 200));
+
+        Marker currentAirport = this.googleMap.addMarker(new MarkerOptions()
         .position(airportLocation)
         .title(airportName)
         .snippet(airportIcao));
 
+        Marker airportSchiphol = this.googleMap.addMarker(new MarkerOptions()
+        .position(Schiphol)
+        .title("Schiphol")
+        .snippet("Schiphol"));
+
         this.googleMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
 
-        PolygonOptions polygonOptions = new PolygonOptions()
-                .add(new LatLng(51.586662, 4.791969),
-                        new LatLng( 51.584434, 4.793528),
-                        new LatLng( 51.587474, 4.795993),
-                        new LatLng(51.586662, 4.791969));
-        this.googleMap.addPolygon(polygonOptions);
+        Polyline line = googleMap.addPolyline(new PolylineOptions()
+        .add(Schiphol, airportLocation)
+        .width(5)
+        .color(Color.BLUE)
+        .geodesic(true));
 
 
         mapView.onResume();
