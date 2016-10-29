@@ -26,10 +26,13 @@
             android:value="AIzaSyC7wjfKCNBeiPSfuc8RVAOR3Pr0_CUCwWE" />
         <activity android:name=".countryActivity">
             <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            <meta-data android:name="android.app.searchable"
+                        android:resource="@xml/searchable"/>
         </activity>
         <activity android:name=".MainActivity" />
         <activity android:name=".DetailActivity"></activity>
